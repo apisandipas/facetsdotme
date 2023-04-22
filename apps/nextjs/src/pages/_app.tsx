@@ -1,7 +1,8 @@
-import "../styles/globals.css";
 import type { AppType } from "next/app";
+import { resetGlobalCss } from "@facets/ui";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { RecoilRoot } from "recoil";
 
 import { api } from "~/utils/api";
 
@@ -9,9 +10,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  resetGlobalCss();
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
     </SessionProvider>
   );
 };

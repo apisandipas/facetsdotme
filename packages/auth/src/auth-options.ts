@@ -1,8 +1,10 @@
+import { prisma } from "@facets/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import bcrypt from "bcrypt";
 import { type DefaultSession, type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-import { prisma } from "@acme/db";
+import { createNewTokens } from "./tokens";
 
 /**
  * Module augmentation for `next-auth` types
@@ -14,6 +16,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      accessToken: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -24,36 +27,73 @@ declare module "next-auth" {
   //   // role: UserRole;
   // }
 }
-
-/**
- * Options for NextAuth.js used to configure
- * adapters, providers, callbacks, etc.
- * @see https://next-auth.js.org/configuration/options
- **/
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    CredentialsProvider({
+      // The name to display on the sign in form (e.g. "Sign in with...")
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const { email, password } = credentials as any;
+        try {
+          const user = await prisma.user.findUnique({
+            where: {
+              email,
+            },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              password: true,
+            },
+          });
+
+          if (!user) return null;
+
+          const passwordMatch = await bcrypt.compare(password, user.password);
+          user.password = null;
+          if (!passwordMatch) return null;
+
+          return user;
+        } catch (e) {
+          console.error(e);
+        }
+      },
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
+  session: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days (Sign out user after 10 minutes of inactivity)
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        // session.user.role = user.role; <-- put other properties on the session here
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          user: user,
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
+        };
       }
+
+      return token;
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      session.user = token.user;
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
+      session.accessTokenExpires = token.accessTokenExpires;
       return session;
     },
   },
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID as string,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-    }),
-    /**
-     * ...add more providers here
-     *
-     * Most other providers require a bit more work than the Discord provider.
-     * For example, the GitHub provider requires you to add the
-     * `refresh_token_expires_in` field to the Account model. Refer to the
-     * NextAuth.js docs for the provider you want to use. Example:
-     * @see https://next-auth.js.org/providers/github
-     **/
-  ],
 };
