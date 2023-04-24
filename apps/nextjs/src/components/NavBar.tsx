@@ -1,5 +1,6 @@
-import { useAuthContext } from "@/utils/auth";
-import { styled, Button } from "ui";
+import Link from "next/link";
+import { Button, styled } from "@facets/ui";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const StyledNavBar = styled("div", {
   display: "flex",
@@ -9,17 +10,27 @@ const StyledNavBar = styled("div", {
 });
 
 const RightSection = styled("div", { marginLeft: "auto" });
+const LeftSection = styled("div", { marginRight: "auto", px: "1rem" });
 
 export const NavBar = () => {
-  const { user, logout, isAuthenticated } = useAuthContext();
+  const { status, data, ...rest } = useSession();
   return (
     <StyledNavBar>
-      NavBar
-      {isAuthenticated && (
+      Facets.me
+      {status === "authenticated" && (
+        <LeftSection>
+          <Link href="/dashboard">Dashboard</Link>
+        </LeftSection>
+      )}
+      {status === "authenticated" ? (
         <RightSection>
-          Welcome @{user?.handle}
+          Welcome, {data.user?.name}
           &nbsp;
-          <Button onClick={logout}>Sign Out</Button>
+          <Button onClick={signOut}>Sign Out</Button>
+        </RightSection>
+      ) : (
+        <RightSection>
+          <Button onClick={signIn}>Login</Button>
         </RightSection>
       )}
     </StyledNavBar>

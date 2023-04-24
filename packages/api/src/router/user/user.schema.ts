@@ -16,6 +16,11 @@ export const userSignUpSchema = z.object({
       required_error: "Password is required",
     })
     .min(8),
+  profile: z.object({
+    handle: z.string({
+      required_error: "Handle is Required",
+    }),
+  }),
 });
 
 export type SignUpDto = z.TypeOf<typeof userSignUpSchema>;

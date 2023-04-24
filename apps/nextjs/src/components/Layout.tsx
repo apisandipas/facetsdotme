@@ -1,5 +1,6 @@
 import { NavBar } from "./NavBar";
-export const Layout = ({ children }: { children: React.ReactChild }) => {
+
+export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <NavBar />

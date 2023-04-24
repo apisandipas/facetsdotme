@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { signIn, useSession } from "next-auth/react";
 import { useRecoilState } from "recoil";
 
-import { userState } from "./store/atoms";
+import { userState } from "../store/atoms";
 
 /* import { api } from "~/utils/api"; */
 
@@ -67,7 +67,7 @@ export default function CreateAccountScreen() {
   }, [session]);
   return (
     <CenteredContainer>
-      CreateAccount Screen
+      Login Screen
       <div>Form Goes Here</div>
       {isLoading ?? "Submitting...."}
       <form

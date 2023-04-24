@@ -11,6 +11,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   resetGlobalCss();
+  console.log({ appSession: session });
   return (
     <SessionProvider session={session}>
       <RecoilRoot>

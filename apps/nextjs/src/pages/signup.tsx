@@ -4,11 +4,16 @@ import { useFormik } from "formik";
 
 import { api } from "~/utils/api";
 
+interface IProfileFields {
+  handle: string;
+}
+
 interface IUserFields {
   email: string;
   name: string;
   password: string;
   passwordConfirm: string;
+  profile: IProfileFields;
 }
 
 const validate = (values: IUserFields) => {
@@ -24,6 +29,11 @@ const validate = (values: IUserFields) => {
 
   if (!values.name) {
     errors.name = "Name must be entered";
+  }
+
+  if (!values.profile.handle) {
+    errors.profile = errors.profile || {};
+    errors.profile.handle = "Handle is required";
   }
 
   if (!values.password) {
@@ -49,6 +59,9 @@ export default function CreateAccountScreen() {
         name: "",
         password: "",
         passwordConfirm: "",
+        profile: {
+          handle: "",
+        },
       },
       validate,
       onSubmit: async (values) => {
@@ -57,6 +70,9 @@ export default function CreateAccountScreen() {
             email: values.email,
             name: values.name,
             password: values.password,
+            profile: {
+              handle: values.profile.handle,
+            },
           },
           {
             onSuccess: () => {
@@ -71,7 +87,6 @@ export default function CreateAccountScreen() {
   return (
     <CenteredContainer>
       CreateAccount Screen
-      <div>Form Goes Here</div>
       <form
         onSubmit={handleSubmit}
         style={{
@@ -90,7 +105,6 @@ export default function CreateAccountScreen() {
           onChange={handleChange}
         />
         {errors.email && touched.email ? <div>{errors.email}</div> : null}
-
         <input
           placeholder="name"
           name="name"
@@ -98,6 +112,15 @@ export default function CreateAccountScreen() {
           onChange={handleChange}
         />
         {errors.name && touched.name ? <div>{errors.name}</div> : null}
+        <input
+          placeholder="handle"
+          name="profile.handle"
+          value={values.profile.handle}
+          onChange={handleChange}
+        />
+        {errors.profile?.handle && touched.profile?.handle ? (
+          <div>{errors.profile?.handle}</div>
+        ) : null}
         <input
           placeholder="password"
           name="password"

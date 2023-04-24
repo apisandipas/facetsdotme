@@ -16,6 +16,11 @@ export const signUp = async (
       email: input.email,
       name: input.name,
       password: bcryptHash,
+      profile: {
+        create: {
+          handle: input.profile.handle,
+        },
+      },
     },
   });
   return {
