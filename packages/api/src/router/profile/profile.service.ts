@@ -9,6 +9,9 @@ export const getProfileById = async ({ ctx, input }: any) => {
 export const getProfileByUserId = async ({ ctx, input }: any) => {
   return await ctx.prisma.profile.findFirst({
     where: { userId: input.userId },
+    include: {
+      links: true,
+    },
   });
 };
 
@@ -28,6 +31,23 @@ export const updateProfile = async ({ ctx, input }: any) => {
     data: {
       bio: input.bio,
       handle: input.handle,
+      // links: {
+      //   // NOTE This likely is a vert inefficient way to do this.
+      //   // This IDs for links will change each time, though there
+      //   // additional meta data will likely stay the same?
+      //   // (Could be an issue when it comes to writing analytics related features)
+      //   deleteMany: {
+      //     id: {
+      //       in: input.links.reduce((acc: any[], link: any) => {
+      //         if (link.id) {
+      //           acc.push(link.id);
+      //           return acc;
+      //         }
+      //       }, []),
+      //     },
+      //   },
+      //   createMany: { data: input.links },
+      // },
     },
   });
 };

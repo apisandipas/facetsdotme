@@ -49,6 +49,7 @@ export const authOptions: NextAuthOptions = {
               email: true,
               name: true,
               password: true,
+              profile: true,
             },
           });
 

@@ -23,7 +23,7 @@ model Profile {
     id      String      @id @default(cuid())
     handle  String
     image   String?
-    bio     String      @db.Text
+    bio     String?      @db.Text
     links   Link[]
     userId  String      @unique
     user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)

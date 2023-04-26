@@ -7,5 +7,4 @@ export const createPostSchema = z.object({
   content: z.string().min(1),
 });
 
-// TODO is this right?
 export const deletePostSchema = z.string();

@@ -1,22 +1,14 @@
-import { styled } from "./theme.config";
 import type * as Stitches from "@stitches/react";
 
+import { styled } from "./theme.config";
+
 export const Button = styled("button", {
-  color: "red",
-  variants: {
-    size: {
-      base: {
-        fontSize: "$base",
-      },
-      lg: {
-        fontSize: "$lg",
-      },
-      xl: {
-        fontSize: "$3xl",
-        padding: "$8",
-      },
-    },
-  },
+  cursor: "pointer",
+  backgroundColor: "$slate900",
+  color: "$slate200",
+  padding: "$2",
+  border: 0,
+  borderRadius: "25px",
 });
 
 export type ButtonVariants = Stitches.VariantProps<typeof Button>;

@@ -1,10 +1,31 @@
+import Head from "next/head";
+import { XIcon, styled } from "@facets/ui";
+
 import { NavBar } from "./NavBar";
 
-export const Layout = ({ children }: { children: React.ReactNode }) => {
+const Page = styled("main", {
+  marginTop: "$24",
+});
+
+const LayoutInner = styled("div", {});
+
+export const Layout = ({
+  children,
+  pageTitle = "",
+}: {
+  children: React.ReactNode;
+  pageTitle: string;
+}) => {
   return (
-    <div>
+    <LayoutInner>
+      <Head>
+        <title>
+          Facets.me - promote each facets of your online presence{" "}
+          {pageTitle && `- ${pageTitle}`}
+        </title>
+      </Head>
       <NavBar />
-      {children}
-    </div>
+      <Page>{children}</Page>
+    </LayoutInner>
   );
 };

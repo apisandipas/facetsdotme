@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@stitches/react": "^1.2.8",
+    "formik": "^2.2.9",
     "react-dom": "^18.2.0",
     "stitches-normalize-css": "^1.2.0",
     "typescript": "^4.7"

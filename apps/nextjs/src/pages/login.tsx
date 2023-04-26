@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
+import { Head } from "next/document";
 import { useRouter } from "next/router";
-import { Button, CenteredContainer } from "@facets/ui";
+import {
+  Box,
+  Button,
+  Container,
+  ErrorMsg,
+  Flex,
+  Form,
+  FormButton,
+  Input,
+  Label,
+  styled,
+} from "@facets/ui";
 import { useFormik } from "formik";
 import { signIn, useSession } from "next-auth/react";
 import { useRecoilState } from "recoil";
 
+import { Layout } from "~/components/Layout";
 import { userState } from "../store/atoms";
 
 /* import { api } from "~/utils/api"; */
@@ -59,48 +72,64 @@ export default function CreateAccountScreen() {
         }
       },
     });
+
   useEffect(() => {
     if (session) {
       setUser(session.user);
-      router.push("/");
+      router.push("/dashboard/links");
     }
   }, [session]);
-  return (
-    <CenteredContainer>
-      Login Screen
-      <div>Form Goes Here</div>
-      {isLoading ?? "Submitting...."}
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 50,
-          marginTop: 50,
-        }}
-      >
-        <input
-          placeholder="email address"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-        />
-        {errors.email && touched.email ? <div>{errors.email}</div> : null}
 
-        <input
-          placeholder="password"
-          name="password"
-          type="password"
-          value={values.password}
-          onChange={handleChange}
-        />
-        {errors.password && touched.password ? (
-          <div>{errors.password}</div>
-        ) : null}
-        <Button>Login</Button>
-      </form>
-    </CenteredContainer>
+  return (
+    <Layout pageTitle="Login">
+      <Container>
+        <Flex
+          css={{
+            flexDirection: "column",
+            justifyContent: "center",
+            mx: "auto",
+            width: "320px",
+            py: "$48",
+          }}
+        >
+          <h2 style={{ margin: "0 auto 2rem" }}>Sign in to your account</h2>
+          <Form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                invalid={errors.email && touched.email}
+              />
+              {errors.email && touched.email ? (
+                <ErrorMsg>{errors.email}</ErrorMsg>
+              ) : null}
+            </Box>
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                name="password"
+                type="password"
+                value={values.password}
+                onChange={handleChange}
+                invalid={errors.password && touched.password}
+              />
+              {errors.password && touched.password ? (
+                <ErrorMsg>{errors.password}</ErrorMsg>
+              ) : null}
+            </Box>
+            <FormButton>Login</FormButton>
+          </Form>
+        </Flex>
+      </Container>
+    </Layout>
   );
 }

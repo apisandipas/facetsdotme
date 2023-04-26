@@ -13,13 +13,7 @@ export const createProfileSchema = z.object({
   handle: z.string({
     required_error: "Handle is required",
   }),
-  bio: z.string(),
-  links: z.array(
-    z.object({
-      text: z.string(),
-      url: z.string(),
-    }),
-  ),
+  bio: z.string().optional(),
 });
 
 export const deleteProfileSchema = z.string();

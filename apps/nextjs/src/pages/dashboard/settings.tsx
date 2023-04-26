@@ -1,13 +1,9 @@
-import Head from "next/head";
+import { Head } from "next/head";
 import {
   Box,
   Button,
   Container,
-  ErrorMsg,
   Flex,
-  FormButton,
-  FormField,
-  Input,
   Label,
   RoundedBox,
   styled,
@@ -25,23 +21,11 @@ import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { Layout } from "~/components/Layout";
 import { Loading } from "~/components/Loading";
-
-const Error = styled(ErrorMessage, {
-  color: "red",
-  fontSize: "0.75rem",
-  ml: "auto",
-});
-
-interface ILinkFields {
-  id?: number;
-  text: string;
-  url: string;
-}
+import { Title } from "~/components/Title";
 
 interface IProfileFields {
   handle: string;
   bio: string;
-  links: ILinkFields[];
 }
 
 const validate = (values: IProfileFields) => {
@@ -52,6 +36,7 @@ const validate = (values: IProfileFields) => {
     // TODO create for uniqueness of handle
   }
 
+  console.log({ errors });
   return errors;
 };
 
@@ -66,18 +51,14 @@ export default function DashboardProfile() {
   if (isLoading) return <Loading />;
 
   return (
-    <Layout pageTitle="Profile Settings">
-      <Head>
-        <Title pageName="Profile" />
-      </Head>
-
+    <Layout pageTitle="Account Settings">
       <Container
         css={{
           maxWidth: "800px",
           px: "4rem",
         }}
       >
-        <h2>Profile</h2>
+        <h2>Settings</h2>
         <Formik
           validate={validate}
           initialValues={{
@@ -99,7 +80,7 @@ export default function DashboardProfile() {
             isSubmitting,
           }: {
             values: IProfileFields;
-            isSubmitting: boolean;
+            isSubmitting: () => boolean;
           }) => (
             <Form
               style={{
@@ -112,19 +93,19 @@ export default function DashboardProfile() {
               <RoundedBox css={{ mb: "2rem" }}>
                 <Flex css={{ flexDirection: "column" }}>
                   <Label htmlFor="handle">Handle</Label>
+                  <Field placeholder="Handle" name="handle" />
 
-                  <FormField name="handle" />
                   <Label htmlFor="bio">Bio / Blurb</Label>
-                  <FormField
+                  <Field
                     name="bio"
                     as="textarea"
                     placeholder="Bio goes here..."
                   />
                 </Flex>
               </RoundedBox>
-              <FormButton type="submit" disabled={isSubmitting}>
+              <button type="submit" disabled={isSubmitting}>
                 Update Profile
-              </FormButton>
+              </button>
             </Form>
           )}
         </Formik>

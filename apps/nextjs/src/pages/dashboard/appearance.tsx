@@ -1,13 +1,9 @@
-import Head from "next/head";
+import { Head } from "next/document";
 import {
   Box,
   Button,
   Container,
-  ErrorMsg,
   Flex,
-  FormButton,
-  FormField,
-  Input,
   Label,
   RoundedBox,
   styled,
@@ -25,6 +21,7 @@ import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { Layout } from "~/components/Layout";
 import { Loading } from "~/components/Loading";
+import { Title } from "~/components/Title";
 
 const Error = styled(ErrorMessage, {
   color: "red",
@@ -32,52 +29,43 @@ const Error = styled(ErrorMessage, {
   ml: "auto",
 });
 
-interface ILinkFields {
-  id?: number;
-  text: string;
-  url: string;
-}
-
 interface IProfileFields {
   handle: string;
   bio: string;
-  links: ILinkFields[];
 }
 
 const validate = (values: IProfileFields) => {
   const errors = {} as any;
 
   if (!values.handle) {
-    errors.handle = "Please enter a unique handle";
     // TODO create for uniqueness of handle
+    errors.handle = "Please enter a unique handle";
   }
-
   return errors;
 };
 
 export default function DashboardProfile() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const userId = session?.user.id as string;
   const { data: profileData, isLoading } = api.profile.byUserId.useQuery({
     userId,
   });
   const updateProfile = api.profile.update.useMutation();
 
-  if (isLoading) return <Loading />;
+  if (isLoading || status === "loading") return <Loading />;
+  if (status === "unauthenticated") {
+    window.location = "/";
+  }
 
   return (
-    <Layout pageTitle="Profile Settings">
-      <Head>
-        <Title pageName="Profile" />
-      </Head>
-
+    <Layout pageTitle="Appearance">
       <Container
         css={{
           maxWidth: "800px",
           px: "4rem",
         }}
       >
-        <h2>Profile</h2>
+        <h2>Appearance</h2>
         <Formik
           validate={validate}
           initialValues={{
@@ -99,7 +87,7 @@ export default function DashboardProfile() {
             isSubmitting,
           }: {
             values: IProfileFields;
-            isSubmitting: boolean;
+            isSubmitting: boolean | undefined;
           }) => (
             <Form
               style={{
@@ -112,19 +100,19 @@ export default function DashboardProfile() {
               <RoundedBox css={{ mb: "2rem" }}>
                 <Flex css={{ flexDirection: "column" }}>
                   <Label htmlFor="handle">Handle</Label>
+                  <Field placeholder="Handle" name="handle" />
 
-                  <FormField name="handle" />
                   <Label htmlFor="bio">Bio / Blurb</Label>
-                  <FormField
+                  <Field
                     name="bio"
                     as="textarea"
                     placeholder="Bio goes here..."
                   />
                 </Flex>
               </RoundedBox>
-              <FormButton type="submit" disabled={isSubmitting}>
+              <button type="submit" disabled={isSubmitting}>
                 Update Profile
-              </FormButton>
+              </button>
             </Form>
           )}
         </Formik>

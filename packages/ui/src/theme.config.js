@@ -1,5 +1,6 @@
 import { createStitches } from "@stitches/react";
 import { normalize } from "stitches-normalize-css";
+
 import palette from "./palette";
 
 export const {
@@ -40,13 +41,13 @@ export const {
     space: {
       px: "1px",
       0: "0",
-      0.5: "0.125rem",
+      "0p5": "0.125rem",
       1: "0.25rem",
-      1.5: "0.375rem",
+      "1p5": "0.375rem",
       2: "0.5rem",
-      2.5: "0.625rem",
+      "2p5": "0.625rem",
       3: "0.75rem",
-      3.5: "0.875rem",
+      "3p5": "0.875rem",
       4: "1rem",
       5: "1.25rem",
       6: "1.5rem",
@@ -93,7 +94,7 @@ export const {
       sans: 'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
       serif: 'Georgia,Cambria,"Times New Roman",Times,serif',
       mono: '"VictorMono", "NerdFontsSymbols Nerd Font", monospace',
-      body: '"Victor Mono", system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+      body: '"Roboto Mono", system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
       heading: '"Victor Mono", Helvetica, sans-serif',
       monospace: '"Victor Mono", monospace',
     },
@@ -347,12 +348,12 @@ export const resetGlobalCss = globalCss(...normalize, {
     boxSizing: "inherit",
   },
   "html,__next,": {
-    height: "100%",
+    height: "100vh",
   },
   body: {
     margin: 0,
-    height: "100%",
-    backgroundColor: "$background",
+    height: "100vh",
+    backgroundColor: "$slate300",
     color: "$text",
     fontSize: "16px",
     fontFamily: "$body",
@@ -361,10 +362,10 @@ export const resetGlobalCss = globalCss(...normalize, {
     boxSizing: "border-box",
   },
   a: {
-    color: "$primary",
+    color: "$sky500",
     textDecoration: "none",
     "&:hover": {
-      color: "$primary25",
+      color: "$slate300",
       textDecoration: "underline",
     },
   },
@@ -410,4 +411,19 @@ export const resetGlobalCss = globalCss(...normalize, {
     height: "1px",
     m: "$3",
   },
+});
+
+export const scaleUp = keyframes({
+  "0%": { transform: "scale(1)" },
+  "100%": { transform: "scale(1.5)" },
+});
+
+export const spin = keyframes({
+  from: { transform: "rotate(0deg)" },
+  to: { transform: "rotate(360deg)" },
+});
+
+export const notificationSlideIn = keyframes({
+  from: { bottom: "-58px" },
+  to: { bottom: "0px" },
 });

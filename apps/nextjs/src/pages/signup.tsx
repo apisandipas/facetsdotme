@@ -1,8 +1,21 @@
+import { Head } from "next/document";
 import { useRouter } from "next/router";
-import { Button, CenteredContainer } from "@facets/ui";
+import {
+  Box,
+  Container,
+  ErrorMsg,
+  Flex,
+  Form,
+  FormButton,
+  Input,
+  Label,
+} from "@facets/ui";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
+import { Layout } from "~/components/Layout";
+import { Title } from "~/components/Title";
 
 interface IProfileFields {
   handle: string;
@@ -50,6 +63,8 @@ const validate = (values: IUserFields) => {
 };
 
 export default function CreateAccountScreen() {
+  const session = useSession();
+  console.log({ session });
   const signUp = api.user.signUp.useMutation();
   const router = useRouter();
   const { handleSubmit, errors, values, handleChange, resetForm, touched } =
@@ -65,7 +80,7 @@ export default function CreateAccountScreen() {
       },
       validate,
       onSubmit: async (values) => {
-        await signUp.mutateAsync(
+        const res = await signUp.mutateAsync(
           {
             email: values.email,
             name: values.name,
@@ -77,7 +92,7 @@ export default function CreateAccountScreen() {
           {
             onSuccess: () => {
               resetForm();
-              router.push("/");
+              router.push("/login");
             },
           },
         );
@@ -85,64 +100,84 @@ export default function CreateAccountScreen() {
     });
 
   return (
-    <CenteredContainer>
-      CreateAccount Screen
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 50,
-          marginTop: 50,
-        }}
-      >
-        <input
-          placeholder="email address"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-        />
-        {errors.email && touched.email ? <div>{errors.email}</div> : null}
-        <input
-          placeholder="name"
-          name="name"
-          value={values.name}
-          onChange={handleChange}
-        />
-        {errors.name && touched.name ? <div>{errors.name}</div> : null}
-        <input
-          placeholder="handle"
-          name="profile.handle"
-          value={values.profile.handle}
-          onChange={handleChange}
-        />
-        {errors.profile?.handle && touched.profile?.handle ? (
-          <div>{errors.profile?.handle}</div>
-        ) : null}
-        <input
-          placeholder="password"
-          name="password"
-          type="password"
-          value={values.password}
-          onChange={handleChange}
-        />
-        {errors.password && touched.password ? (
-          <div>{errors.password}</div>
-        ) : null}
-        <input
-          placeholder="confirm password"
-          name="passwordConfirm"
-          type="password"
-          value={values.passwordConfirm}
-          onChange={handleChange}
-        />
-        {errors.passwordConfirm && touched.passwordConfirm ? (
-          <div>{errors.passwordConfirm}</div>
-        ) : null}
-        <Button>Sign Up</Button>
-      </form>
-    </CenteredContainer>
+    <Layout pageTitle="Create an account">
+      <Container>
+        <Flex
+          css={{
+            flexDirection: "column",
+            justifyContent: "center",
+            mx: "auto",
+            width: "320px",
+          }}
+        >
+          <h2 style={{ margin: "0 auto 2rem" }}>Sign up for an account</h2>
+          <Form onSubmit={handleSubmit}>
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                invalid={errors.email && touched.email}
+              />
+              {errors.email && touched.email ? (
+                <ErrorMsg>{errors.email}</ErrorMsg>
+              ) : null}
+            </Box>
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                name="name"
+                value={values.name}
+                onChange={handleChange}
+                invalid={errors.name && touched.name}
+              />
+              {errors.name && touched.name ? (
+                <ErrorMsg>{errors.name}</ErrorMsg>
+              ) : null}
+            </Box>
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="handle">@Handle</Label>
+              <Input
+                name="profile.handle"
+                value={values.profile.handle}
+                onChange={handleChange}
+                invalid={errors.profile?.handle && touched.profile?.handle}
+              />
+              {errors.profile?.handle && touched.profile?.handle ? (
+                <ErrorMsg>{errors.profile?.handle}</ErrorMsg>
+              ) : null}
+            </Box>
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                name="password"
+                type="password"
+                value={values.password}
+                onChange={handleChange}
+                invalid={errors.password && touched.password}
+              />
+              {errors.password && touched.password ? (
+                <ErrorMsg>{errors.password}</ErrorMsg>
+              ) : null}
+            </Box>
+            <Box css={{ mb: "$2" }}>
+              <Label htmlFor="passwordConfirm">Confirm Password</Label>
+              <Input
+                name="passwordConfirm"
+                type="password"
+                value={values.passwordConfirm}
+                onChange={handleChange}
+                invalid={errors.passwordConfirm && touched.passwordConfirm}
+              />
+              {errors.passwordConfirm && touched.passwordConfirm ? (
+                <ErrorMsg>{errors.passwordConfirm}</ErrorMsg>
+              ) : null}
+            </Box>
+            <FormButton>Sign Up</FormButton>
+          </Form>
+        </Flex>
+      </Container>
+    </Layout>
   );
 }

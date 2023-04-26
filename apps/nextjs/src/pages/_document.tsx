@@ -2,6 +2,8 @@ import React from "react";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import { getCssText } from "@facets/ui";
 
+import { Title } from "~/components/Title";
+
 export default class MyDocument extends Document {
   render() {
     return (

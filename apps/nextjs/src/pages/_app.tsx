@@ -5,18 +5,20 @@ import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
 
 import { api } from "~/utils/api";
+import { NotificationProvider } from "~/contexts/NotificationsContext";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   resetGlobalCss();
-  console.log({ appSession: session });
   return (
     <SessionProvider session={session}>
-      <RecoilRoot>
-        <Component {...pageProps} />
-      </RecoilRoot>
+      <NotificationProvider>
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
+      </NotificationProvider>
     </SessionProvider>
   );
 };
