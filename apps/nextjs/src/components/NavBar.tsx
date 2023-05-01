@@ -10,6 +10,8 @@ import {
 } from "@facets/ui";
 import { signIn, signOut, useSession } from "next-auth/react";
 
+import { UIPopover } from "./PopoverMenu";
+
 const StyledNavBar = styled("div", {
   display: "flex",
   alignItems: "center",
@@ -25,12 +27,15 @@ const StyledNavBar = styled("div", {
 
 const RightSection = styled("div", { marginLeft: "auto" });
 const LeftSection = styled("div", {
+  display: "none",
   marginRight: "auto",
   ml: "2rem",
   px: "1.25rem",
-  display: "flex",
   alignItems: "center",
   gap: "1.5rem",
+  "@lg": {
+    display: "flex",
+  },
 });
 
 const NavLink = styled(Link, {
@@ -55,6 +60,13 @@ const NavLink = styled(Link, {
   },
 });
 
+const MobilePopoverMenu = styled(UIPopover, {
+  display: "block",
+  "@lg": {
+    display: "none",
+  },
+});
+
 const NavigationLink = ({ href, children }) => {
   return (
     <NavLink href={href} active={href === window.location.pathname}>
@@ -62,6 +74,19 @@ const NavigationLink = ({ href, children }) => {
     </NavLink>
   );
 };
+
+const HideOnDesktop = styled("div", {
+  display: "flex",
+  "@lg": {
+    display: "none",
+  },
+});
+const HideOnMobile = styled("div", {
+  display: "none",
+  "@lg": {
+    display: "flex",
+  },
+});
 
 const AppearanceIcon = styled(AppearanceIconBase, {
   fill: "$slate200",
@@ -82,41 +107,80 @@ const FacetsIcon = styled(FacetsIconBase, {
   height: "24px",
   width: "24px",
   transform: "rotate(90degs)",
+  display: "inline-block",
 });
 
+const FacetsIconDesktop = styled(FacetsIcon, {
+  display: "none",
+  "@lg": {
+    display: "inline-block",
+  },
+});
+
+const WelcomeMsg = styled("span", {
+  display: "none",
+  "@lg": {
+    display: "inline-block",
+    mr: "1rem",
+  },
+});
+
+const navConfig = [
+  { text: "Profile", icon: <ProfileIcon />, url: "/dashboard/profile" },
+  { text: "Links", icon: <LinksIcon />, url: "/dashboard/links" },
+  {
+    text: "Appearance",
+    icon: <AppearanceIcon />,
+    url: "/dashboard/appearance",
+  },
+  { text: "Settings", icon: <SettingsIcon />, url: "/dashboard/settings" },
+];
+
+const NavLinks = () => {
+  return navConfig.map(({ text, icon, url }, index) => (
+    <NavLink href={url} key={`nav-link-${index}`}>
+      {icon}
+      {text}
+    </NavLink>
+  ));
+};
+
 export const NavBar = () => {
-  const { status, data, ...rest } = useSession();
+  const { status, data } = useSession();
   const signMeOut = () => {
     signOut({ callbackUrl: "/login" });
   };
 
   return (
     <StyledNavBar>
-      <FacetsIcon />
+      <HideOnMobile>
+        <FacetsIcon />
+      </HideOnMobile>
       {status === "authenticated" && (
-        <LeftSection>
-          <NavigationLink href="/dashboard/profile">
-            <ProfileIcon />
-            Profile
-          </NavigationLink>
-          <NavigationLink href="/dashboard/links">
-            <LinksIcon />
-            Links
-          </NavigationLink>
-          <NavigationLink href="/dashboard/appearance">
-            <AppearanceIcon />
-            Appearance
-          </NavigationLink>
-          <NavigationLink href="/dashboard/settings">
-            <SettingsIcon />
-            Settings
-          </NavigationLink>
-        </LeftSection>
+        <>
+          <MobilePopoverMenu
+            trigger={
+              <HideOnDesktop>
+                <FacetsIcon />
+              </HideOnDesktop>
+            }
+            content={<NavLinks />}
+          />
+          <LeftSection>
+            {navConfig.map(({ text, icon, url }, index) => {
+              return (
+                <NavigationLink href={url} key={`navigation-link-${index}`}>
+                  {icon}
+                  {text}
+                </NavigationLink>
+              );
+            })}
+          </LeftSection>
+        </>
       )}
       {status === "authenticated" ? (
         <RightSection>
-          Welcome, {data.user?.profile?.handle}
-          &nbsp;
+          <WelcomeMsg>Welcome, {data.user?.profile?.handle}</WelcomeMsg>
           <Button onClick={signMeOut}>Sign Out</Button>
         </RightSection>
       ) : (

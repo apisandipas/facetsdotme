@@ -1,4 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "../../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "../../trpc";
 import {
   createProfileSchema,
   deleteProfileSchema,
@@ -16,19 +20,19 @@ import {
 
 export const profileRouter = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => getAllProfiles({ ctx })),
-  byId: publicProcedure
+  byId: protectedProcedure
     .input(profileByIdSchema)
     .query(async ({ ctx, input }) => getProfileById({ ctx, input })),
-  byUserId: publicProcedure
+  byUserId: protectedProcedure
     .input(profileByUserIdSchema)
     .query(async ({ ctx, input }) => getProfileByUserId({ ctx, input })),
-  create: publicProcedure
+  create: protectedProcedure
     .input(createProfileSchema)
     .mutation(async ({ ctx, input }) => createProfile({ ctx, input })),
-  update: publicProcedure
+  update: protectedProcedure
     .input(createProfileSchema)
     .mutation(async ({ ctx, input }) => updateProfile({ ctx, input })),
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(deleteProfileSchema)
     .mutation(async ({ ctx, input }) => deleteProfile({ ctx, input })),
 });

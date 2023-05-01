@@ -1,15 +1,37 @@
-import { createTRPCRouter, publicProcedure } from "../../trpc";
 import {
-  createOrUpdateLinksSchema,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "../../trpc";
+import {
+  createLinkSchema,
+  deleteLinkSchema,
   linksByProfileIdSchema,
+  updateLinkSchema,
+  updateLinkSortOrderSchema,
 } from "./link.schema";
-import { createOrUpdateLinks, g, getLinksByProfileId } from "./link.service";
+import {
+  createLink,
+  deletelink,
+  getLinksByProfileId,
+  updateLink,
+  updateLinkSortOrder,
+} from "./link.service";
 
 export const linkRouter = createTRPCRouter({
-  byProfileId: publicProcedure
+  byProfileId: protectedProcedure
     .input(linksByProfileIdSchema)
     .query(async ({ ctx, input }) => getLinksByProfileId({ ctx, input })),
-  createOrUpdate: publicProcedure
-    .input(createOrUpdateLinksSchema)
-    .mutation(async ({ ctx, input }) => createOrUpdateLinks({ ctx, input })),
+  create: protectedProcedure
+    .input(createLinkSchema)
+    .mutation(async ({ ctx, input }) => createLink({ ctx, input })),
+  update: protectedProcedure
+    .input(updateLinkSchema)
+    .mutation(async ({ ctx, input }) => updateLink({ ctx, input })),
+  updateSortOrder: publicProcedure
+    .input(updateLinkSortOrderSchema)
+    .mutation(async ({ ctx, input }) => updateLinkSortOrder({ ctx, input })),
+  delete: protectedProcedure
+    .input(deleteLinkSchema)
+    .mutation(async ({ ctx, input }) => deletelink({ ctx, input })),
 });

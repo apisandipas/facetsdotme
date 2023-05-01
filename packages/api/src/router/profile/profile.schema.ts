@@ -17,3 +17,8 @@ export const createProfileSchema = z.object({
 });
 
 export const deleteProfileSchema = z.string();
+
+export type ProfileByIdDto = z.TypeOf<typeof profileByIdSchema>;
+export type ProfileByUserIdDto = z.TypeOf<typeof profileByUserIdSchema>;
+export type CreateProfileDto = z.TypeOf<typeof createProfileSchema>;
+export type DeleteProfileDto = z.TypeOf<typeof deleteProfileSchema>;

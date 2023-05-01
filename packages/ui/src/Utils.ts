@@ -26,8 +26,9 @@ export const Container = styled("div", {
 });
 
 export const RoundedBox = styled("div", {
+  display: "flex",
+  flexDirection: "row",
   backgroundColor: "$slate400",
-  // border: "1px solid black",
   boxShadow: "$md",
   borderRadius: "25px",
   padding: "2rem",

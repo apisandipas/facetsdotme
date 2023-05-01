@@ -1,5 +1,5 @@
-import { Head } from "next/document";
 import { useRouter } from "next/router";
+import { checkHandleAvailable } from "@facets/api/src/router/user/user.service";
 import {
   Box,
   Container,
@@ -14,8 +14,8 @@ import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
+import { validateEmail } from "~/utils/validation";
 import { Layout } from "~/components/Layout";
-import { Title } from "~/components/Title";
 
 interface IProfileFields {
   handle: string;
@@ -29,15 +29,26 @@ interface IUserFields {
   profile: IProfileFields;
 }
 
-const validate = (values: IUserFields) => {
+const validate = async (
+  values: IUserFields,
+  checkHandleAvailability: any,
+  checkEmailAvailablity: any,
+) => {
   const errors: any = {};
 
   if (!values.email) {
     errors.email = "Please enter an email address";
-    // TODO Replace with something more robust
-    // TODO Pull out into utility function
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  } else if (!validateEmail(values.email)) {
     errors.email = "Please enter a valid email address";
+  }
+
+  if (values.email) {
+    const emailAvailable = await checkEmailAvailablity.mutateAsync({
+      email: values.email,
+    });
+    if (!emailAvailable) {
+      errors.email = "Email is already in use.";
+    }
   }
 
   if (!values.name) {
@@ -47,6 +58,16 @@ const validate = (values: IUserFields) => {
   if (!values.profile.handle) {
     errors.profile = errors.profile || {};
     errors.profile.handle = "Handle is required";
+  }
+
+  if (values.profile.handle) {
+    const handleAvailable = await checkHandleAvailability.mutateAsync({
+      handle: values.profile.handle,
+    });
+    if (!handleAvailable) {
+      errors.profile = errors.profile || {};
+      errors.profile.handle = "Handle is not available";
+    }
   }
 
   if (!values.password) {
@@ -66,6 +87,9 @@ export default function CreateAccountScreen() {
   const session = useSession();
   console.log({ session });
   const signUp = api.user.signUp.useMutation();
+  const checkEmailAvailability = api.user.checkEmailAvailability.useMutation();
+  const checkHandleAvailability =
+    api.user.checkHandleAvailability.useMutation();
   const router = useRouter();
   const { handleSubmit, errors, values, handleChange, resetForm, touched } =
     useFormik<IUserFields>({
@@ -78,7 +102,8 @@ export default function CreateAccountScreen() {
           handle: "",
         },
       },
-      validate,
+      validate: (values) =>
+        validate(values, checkHandleAvailability, checkEmailAvailability),
       onSubmit: async (values) => {
         const res = await signUp.mutateAsync(
           {

@@ -20,7 +20,7 @@ interface NotificationContextType {
     type,
   }: {
     message: string;
-    type: NotificationType;
+    type?: NotificationType;
   }) => void;
 }
 
@@ -60,7 +60,6 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     message: string;
     type: NotificationType;
   }) => {
-    console.log({ message });
     setNotification({ message, type });
   };
 

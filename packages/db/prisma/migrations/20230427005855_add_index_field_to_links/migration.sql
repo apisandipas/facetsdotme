@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Link" ADD COLUMN     "index" INTEGER NOT NULL DEFAULT 0;

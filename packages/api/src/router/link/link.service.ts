@@ -1,44 +1,88 @@
-export const getLinksByProfileId = async ({ ctx, input }: any) => {
+import type { Context } from "../../trpc";
+import {
+  CreateLinkDto,
+  DeleteLinkDto,
+  LinksByProfileIdDto,
+  UpdateLinkDto,
+  UpdateLinkSortOrderDto,
+} from "./link.schema";
+
+export const getLinksByProfileId = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: LinksByProfileIdDto;
+}) => {
   return await ctx.prisma.link.findMany({
     where: { profileId: input.profileId },
+    orderBy: [{ sortOrder: "asc" }],
   });
 };
 
-export const createOrUpdateLinks = async ({ ctx, input }: any) => {
-  const currentLinks = await ctx.prisma.link.findMany({
-    where: { profileId: input.profileId },
-  });
-
-  const linkIdsToUpdate = input.links.reduce((acc, link) => {
-    if (link.id) {
-      acc.push(link.id);
-    }
-    return acc;
-  }, []);
-
-  const linkIdsToDelete = currentLinks
-    .reduce((acc, link) => {
-      acc.push(link.id);
-      return acc;
-    }, [])
-    .filter((x) => !linkIdsToUpdate.includes(x));
-
-  const allTheThings = input.links.reduce((acc: any[], link: any) => {
-    const thing = {
-      where: { id: link.id || "" },
-      create: link,
-    };
-    acc.push(thing);
-    return acc;
-  }, []);
-
-  return await ctx.prisma.profile.update({
-    where: { id: input.profileId },
+export const createLink = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: CreateLinkDto;
+}) => {
+  return await ctx.prisma.link.create({
     data: {
-      links: {
-        connectOrCreate: allTheThings,
-        deleteMany: { id: { in: linkIdsToDelete } },
-      },
+      profileId: input.profileId,
+      text: input.text,
+      url: input.url,
+      sortOrder: input.sortOrder,
     },
+  });
+};
+
+export const updateLink = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: UpdateLinkDto;
+}) => {
+  return await ctx.prisma.link.update({
+    where: { id: input.id },
+    data: {
+      text: input.text,
+      url: input.url,
+      sortOrder: input.sortOrder,
+    },
+  });
+};
+
+export const updateLinkSortOrder = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: UpdateLinkSortOrderDto;
+}) => {
+  const res = await Promise.all(
+    input.links.map(
+      async (link) =>
+        await ctx.prisma.link.update({
+          where: { id: link.id },
+          data: {
+            sortOrder: link.sortOrder,
+          },
+        }),
+    ),
+  );
+  return res;
+};
+
+export const deletelink = async ({
+  ctx,
+  input,
+}: {
+  ctx: any;
+  input: DeleteLinkDto;
+}) => {
+  return await ctx.prisma.link.delete({
+    where: { id: input.id },
   });
 };

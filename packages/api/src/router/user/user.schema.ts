@@ -25,4 +25,20 @@ export const userSignUpSchema = z.object({
     .optional(),
 });
 
+export const checkHandleAvailableSchema = z.object({
+  handle: z.string({
+    required_error: "Handle is required",
+  }),
+});
+
+export const checkEmailAvailableSchema = z.object({
+  email: z.string({
+    required_error: "Email is required",
+  }),
+});
+
 export type SignUpDto = z.TypeOf<typeof userSignUpSchema>;
+export type CheckHandleAvailableDto = z.TypeOf<
+  typeof checkHandleAvailableSchema
+>;
+export type CheckEmailAvailableDto = z.TypeOf<typeof checkEmailAvailableSchema>;

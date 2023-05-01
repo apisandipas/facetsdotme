@@ -4,7 +4,10 @@ import { XIcon, styled } from "@facets/ui";
 import { NavBar } from "./NavBar";
 
 const Page = styled("main", {
-  marginTop: "$24",
+  marginTop: "$6",
+  "@md": {
+    marginTop: "$16",
+  },
 });
 
 const LayoutInner = styled("div", {});

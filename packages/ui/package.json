@@ -25,6 +25,7 @@
     "typescript": "^4.7"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.0.5",
     "@stitches/react": "^1.2.8",
     "formik": "^2.2.9",
     "react-dom": "^18.2.0",

@@ -21,7 +21,7 @@ model User {
 
 model Profile {
     id      String      @id @default(cuid())
-    handle  String
+    handle  String      @unique
     image   String?
     bio     String?      @db.Text
     links   Link[]
@@ -31,6 +31,7 @@ model Profile {
 
 model Link {
     id          String   @id @default(cuid())
+    sortOrder       Int      @default(0)
     url         String
     text        String
     profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
