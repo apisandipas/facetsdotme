@@ -61,12 +61,17 @@ const validate = async (
   }
 
   if (values.profile.handle) {
-    const handleAvailable = await checkHandleAvailability.mutateAsync({
-      handle: values.profile.handle,
-    });
-    if (!handleAvailable) {
+    if (/[!@&\/\\#,+()$~%.'":*?<>{}]/.test(values.profile?.handle)) {
       errors.profile = errors.profile || {};
-      errors.profile.handle = "Handle is not available";
+      errors.profile.handle = `Handle cannot contain the following: !@&\#,+()$~%.'":*?<>{}`;
+    } else {
+      const handleAvailable = await checkHandleAvailability.mutateAsync({
+        handle: values.profile.handle,
+      });
+      if (!handleAvailable) {
+        errors.profile = errors.profile || {};
+        errors.profile.handle = "Handle is not available";
+      }
     }
   }
 
@@ -111,7 +116,7 @@ export default function CreateAccountScreen() {
             name: values.name,
             password: values.password,
             profile: {
-              handle: values.profile.handle,
+              handle: "@" + values.profile.handle,
             },
           },
           {

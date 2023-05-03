@@ -6,6 +6,7 @@ import {
 import {
   createProfileSchema,
   deleteProfileSchema,
+  profileByHandleSchema,
   profileByIdSchema,
   profileByUserIdSchema,
 } from "./profile.schema";
@@ -13,6 +14,7 @@ import {
   createProfile,
   deleteProfile,
   getAllProfiles,
+  getProfileByHandle,
   getProfileById,
   getProfileByUserId,
   updateProfile,
@@ -20,6 +22,9 @@ import {
 
 export const profileRouter = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => getAllProfiles({ ctx })),
+  byHandle: publicProcedure
+    .input(profileByHandleSchema)
+    .query(async ({ ctx, input }) => getProfileByHandle({ ctx, input })),
   byId: protectedProcedure
     .input(profileByIdSchema)
     .query(async ({ ctx, input }) => getProfileById({ ctx, input })),
