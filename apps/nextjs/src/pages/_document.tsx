@@ -11,6 +11,7 @@ export default class MyDocument extends Document {
             id="stitches"
             dangerouslySetInnerHTML={{ __html: getCssText() }}
           />
+          <link rel="icon" href="/favicon.ico?v=2" />
         </Head>
         <body>
           <Main />

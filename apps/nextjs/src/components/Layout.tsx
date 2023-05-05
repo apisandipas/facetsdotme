@@ -5,9 +5,6 @@ import { NavBar } from "./NavBar";
 
 const Page = styled("main", {
   marginTop: "$6",
-  "@md": {
-    marginTop: "$16",
-  },
 });
 
 const LayoutInner = styled("div", {});

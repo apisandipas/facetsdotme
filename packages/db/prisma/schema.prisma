@@ -2,77 +2,74 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    password      String    @db.Text
-    profile       Profile?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String    @db.Text
+  profile       Profile?
 }
 
 model Profile {
-    id      String      @id @default(cuid())
-    handle  String      @unique
-    image   String?
-    bio     String?      @db.Text
-    links   Link[]
-    userId  String      @unique
-    user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String         @id @default(cuid())
+  handle        String         @unique
+  image         String?
+  bio           String?        @db.Text
+  links         Link[]
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  themeSettings ThemeSettings?
 }
 
 model Link {
-    id          String   @id @default(cuid())
-    sortOrder       Int      @default(0)
-    url         String
-    text        String
-    profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-    profileId   String
+  id        String  @id @default(cuid())
+  sortOrder Int     @default(0)
+  url       String
+  text      String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
 }
 
-// NextAuth.js Models
-// NOTE: When using postgresql, mysql or sqlserver,
-// uncomment the @db.Text annotations below
-// @see https://next-auth.js.org/schemas/models
-// model Account {
-//     id                String  @id @default(cuid())
-//     userId            String
-//     type              String
-//     provider          String
-//     providerAccountId String
-//     refresh_token     String?  @db.Text
-//     access_token      String?  @db.Text
-//     expires_at        Int?
-//     token_type        String?
-//     scope             String?
-//     id_token          String?  @db.Text
-//     session_state     String?
-//     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+model ThemeSettings {
+  id                  String          @id @default(cuid())
+  bgStyle             BackgroundStyle @default(SOLID)
+  bgColor             String?
+  bgImage             String?
+  bgGradientDirection String?
+  buttonStyle         ButtonStyle     @default(SOLID_RECT)
+  buttonBGColor       String?
+  buttonFGColor       String?
+  buttonShadowColor   String?
+  profile             Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId           String          @unique
+}
 
-//     @@unique([provider, providerAccountId])
-// }
+enum ButtonStyle {
+  SOLID_RECT
+  SOLID_ROUNDISH
+  SOLID_ROUND
+  OUTLINE_RECT
+  OUTLINE_ROUNDISH
+  OUTLINE_ROUND
+  SOFT_SHADOW_RECT
+  SOFT_SHADOW_ROUNDISH
+  SOFT_SHADOW_ROUND
+  HARD_SHADOW_RECT
+  HARD_SHADOW_ROUNDISH
+  HARD_SHADOW_ROUND
+}
 
-// model Session {
-//     id           String   @id @default(cuid())
-//     sessionToken String   @unique
-//     userId       String
-//     expires      DateTime
-//     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
-
-// model VerificationToken {
-//     identifier String
-//     token      String   @unique
-//     expires    DateTime
-
-//     @@unique([identifier, token])
-// }
+enum BackgroundStyle {
+  SOLID
+  GRADIENT
+  IMAGE
+}

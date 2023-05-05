@@ -20,12 +20,18 @@ export const getProfileByHandle = async ({
   ctx: Context | { prisma: PrismaClient };
   input: ProfileByHandleDto;
 }) => {
-  return await ctx.prisma.profile.findFirst({
+  const profile = await ctx.prisma.profile.findFirst({
     where: { handle: input.handle },
     include: {
-      links: true,
+      links: {
+        orderBy: {
+          sortOrder: "asc",
+        },
+      },
+      themeSettings: true,
     },
   });
+  return profile;
 };
 
 export const getProfileById = async ({
@@ -45,12 +51,13 @@ export const getProfileByUserId = async ({
   ctx: Context;
   input: ProfileByUserIdDto;
 }) => {
-  return await ctx.prisma.profile.findFirst({
+  const profile = await ctx.prisma.profile.findFirst({
     where: { userId: input.userId },
     include: {
       links: true,
     },
   });
+  return profile;
 };
 
 // not currently used as profile is created initially with just handle durint signup
@@ -61,12 +68,19 @@ export const createProfile = async ({
   ctx: Context;
   input: CreateProfileDto;
 }) => {
-  return await ctx.prisma.profile.create({
+  const profile = await ctx.prisma.profile.create({
     data: {
       bio: input.bio,
       handle: input.handle,
     },
   });
+
+  await ctx.prisma.themeSettings.create({
+    data: {
+      profileId: profile.id,
+    },
+  });
+  return profile;
 };
 
 export const updateProfile = async ({

@@ -126,13 +126,13 @@ const WelcomeMsg = styled("span", {
 });
 
 const navConfig = [
-  { text: "Profile", icon: <ProfileIcon />, url: "/dashboard/profile" },
   { text: "Links", icon: <LinksIcon />, url: "/dashboard/links" },
   {
     text: "Appearance",
     icon: <AppearanceIcon />,
     url: "/dashboard/appearance",
   },
+  { text: "Analytics", icon: <ProfileIcon />, url: "/dashboard/analytics" },
   { text: "Settings", icon: <SettingsIcon />, url: "/dashboard/settings" },
 ];
 

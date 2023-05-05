@@ -20,9 +20,11 @@ export const Flex = styled("div", {
 });
 
 export const Container = styled("div", {
+  display: "flex",
+  flexDirection: "column",
   margin: "0 auto",
   maxWidth: "1040px",
-  width: "100%",
+  // width: "100%",
 });
 
 export const RoundedBox = styled("div", {

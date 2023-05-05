@@ -24,6 +24,9 @@ export const signUp = async (
       profile: {
         create: {
           handle: input?.profile?.handle!,
+          themeSettings: {
+            create: {},
+          },
         },
       },
     },

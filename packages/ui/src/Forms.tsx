@@ -12,7 +12,7 @@ export const Form = styled("form", {
 });
 
 export const ErrorMsg = styled("div", {
-  color: "$rose500",
+  color: "$rose600",
   fontSize: "0.75rem",
   ml: "auto",
 });

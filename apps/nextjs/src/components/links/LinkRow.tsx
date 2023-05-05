@@ -18,6 +18,7 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { api } from "~/utils/api";
 import { validateLink } from "~/utils/validation";
+import { useProfilePreview } from "~/contexts";
 import { useNotification } from "~/contexts/NotificationsContext";
 
 const HandleIcon = styled(HandleIconBase, {});
@@ -54,6 +55,7 @@ const DeleteMsg = styled("div", {
 });
 export function LinkRow({ link, index }) {
   const utils = api.useContext();
+  const { refreshPreview } = useProfilePreview();
   const [isEditing, setIsEditing] = useState(false);
   const [promptForDeletion, setPromptForDeletion] = useState(false);
   const { showNotification } = useNotification();
@@ -82,7 +84,7 @@ export function LinkRow({ link, index }) {
       {
         onSuccess: () => {
           showNotification({ message: "Link deleted!" });
-
+          refreshPreview();
           utils.link.byProfileId.invalidate();
         },
       },
