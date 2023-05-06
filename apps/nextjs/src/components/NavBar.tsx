@@ -3,6 +3,7 @@ import {
   AppearanceIcon as AppearanceIconBase,
   Button,
   FacetsIcon as FacetsIconBase,
+  Flex,
   LinksIcon as LinksIconBase,
   ProfileIcon as ProfileIconBase,
   SettingsIcon as SettingsIconBase,
@@ -10,6 +11,7 @@ import {
 } from "@facets/ui";
 import { signIn, signOut, useSession } from "next-auth/react";
 
+import { AvatarPlaceholder } from "./AvatarPlaceholder";
 import { UIPopover } from "./PopoverMenu";
 
 const StyledNavBar = styled("div", {
@@ -25,7 +27,7 @@ const StyledNavBar = styled("div", {
   backgroundColor: "$slate700",
 });
 
-const RightSection = styled("div", { marginLeft: "auto" });
+const RightSection = styled(Flex, { marginLeft: "auto", gap: "0.5rem" });
 const LeftSection = styled("div", {
   display: "none",
   marginRight: "auto",
@@ -180,7 +182,8 @@ export const NavBar = () => {
       )}
       {status === "authenticated" ? (
         <RightSection>
-          <WelcomeMsg>Welcome, {data.user?.profile?.handle}</WelcomeMsg>
+          {/* <WelcomeMsg>Welcome, {data.user?.profile?.handle}</WelcomeMsg> */}
+          <AvatarPlaceholder size="small" handle={data.user?.profile?.handle} />
           <Button onClick={signMeOut}>Sign Out</Button>
         </RightSection>
       ) : (

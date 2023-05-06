@@ -38,7 +38,7 @@ Let's deploy the Next.js application to [Vercel](https://vercel.com/). If you ha
 
 2. Add your `DATABASE_URL` environment variable.
 
-3. Done! Your app should successfully deploy. Assign your domain and use that instead of `localhost` for the `url` in the Expo app so that your Expo app can communicate with your backend when you are not in development.
+3. Done! Your app should successfully deploy. 
 
 ## References
 

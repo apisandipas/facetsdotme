@@ -16,6 +16,11 @@ const AvatarPlaceholderInner = styled("div", {
         width: "120px",
         height: "120px",
       },
+      small: {
+        width: "40px",
+        height: "40px",
+        fontSize: "$lg",
+      },
     },
   },
 });

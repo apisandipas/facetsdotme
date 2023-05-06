@@ -3,40 +3,22 @@ import { getProfileByHandle } from "@facets/api/src/router/profile/profile.servi
 import { prisma } from "@facets/db";
 import { Box, Flex, styled } from "@facets/ui";
 
+import { useThemedComponents } from "~/utils/hooks/useThemedComponents";
 import { AvatarPlaceholder } from "~/components/AvatarPlaceholder";
 
-const ProfileLinkButton = styled(Link, {
-  display: "flex",
-  background: "$slate800",
-  alignItems: "center",
-  justifyContent: "center",
+const ProfileWrapper = styled(Flex, {
   p: "1rem",
-  mb: "1rem",
-  "&:hover": {
-    textDecoration: "none",
-  },
-  variants: {
-    variant: {
-      SOLID_RECT: {
-        borderRadius: 0,
-      },
-      SOLID_ROUNDISH: {
-        borderRadius: "8px",
-      },
-      SOLID_ROUND: {
-        borderRadius: "25px",
-      },
-    },
-  },
+  /* justifyContent: "center", */
+  flexDirection: "column",
+  alignItems: "center",
+  height: "$full",
 });
 
-const ProfileLinksWrapper = styled("div", {
+const ProfileLinksWrapper = styled(Flex, {
   maxWidth: "600px",
-  margin: " 0 auto ",
-});
-
-const ProfileWrapper = styled("div", {
-  m: "1rem",
+  width: "$full",
+  flexDirection: "column",
+  alignItems: "center",
 });
 
 const PublicProfilePage = ({ profile, error }: any) => {
@@ -45,40 +27,65 @@ const PublicProfilePage = ({ profile, error }: any) => {
   }
   /* console.log({ profile }); */
   const { themeSettings } = profile;
+  const {
+    buttonStyle,
+    /* buttonBGColor,
+     * buttonFGColor,
+     * bgColor,
+     * buttonShadowColor, */
+  } = themeSettings;
+
+  const { components, safeForegroundColor } =
+    useThemedComponents(themeSettings);
+  const { ProfilePage, ProfileLinkButton } = components;
 
   return (
-    <ProfileWrapper>
-      <Flex
-        css={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          mt: "1.5rem",
-        }}
-      >
-        <Box>
-          <AvatarPlaceholder size="large" handle={profile.handle} />
-        </Box>
-        <Box as="h1" css={{ fontSize: "$2xl" }}>
-          {profile.handle}
-        </Box>
-        <Box css={{ mb: "2rem" }}>{profile.bio}</Box>
-      </Flex>
-      <ProfileLinksWrapper>
-        {profile.links.map((link) => {
-          return (
-            <ProfileLinkButton
-              variant={themeSettings.buttonStyle}
-              href={link.url}
-              key={link.url}
-            >
-              {link.text}
-            </ProfileLinkButton>
-          );
-        })}
-      </ProfileLinksWrapper>
-      <Flex>Facets.me</Flex>
-    </ProfileWrapper>
+    <ProfilePage>
+      <ProfileWrapper>
+        <Flex
+          css={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box>
+            <AvatarPlaceholder size="large" handle={profile.handle} />
+          </Box>
+          <Box as="h1" css={{ fontSize: "$2xl" }}>
+            {profile.handle}
+          </Box>
+          <Box css={{ mb: "2rem" }}>{profile.bio}</Box>
+        </Flex>
+        <ProfileLinksWrapper>
+          {profile.links.map((link: any) => {
+            return (
+              <ProfileLinkButton
+                buttonStyle={buttonStyle}
+                href={link.url}
+                key={link.url}
+              >
+                {link.text}
+              </ProfileLinkButton>
+            );
+          })}
+        </ProfileLinksWrapper>
+        <Flex
+          css={{
+            mt: "auto",
+          }}
+        >
+          <Box>
+            <img src="/facets-icon.svg" />
+          </Box>
+          <Flex
+            css={{ ml: "1rem", height: "32px", color: safeForegroundColor }}
+          >
+            Facets.me
+          </Flex>
+        </Flex>
+      </ProfileWrapper>
+    </ProfilePage>
   );
 };
 
