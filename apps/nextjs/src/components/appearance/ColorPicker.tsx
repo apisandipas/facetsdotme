@@ -63,13 +63,13 @@ const PopoverClose = styled(Popover.Close, {
   /* "&:focus": { boxShadow: `0 0 0 2px ${violet.violet7}` }, */
 });
 
-export const ColorPicker = ({ handleChange, value }) => {
+export const ColorPicker = ({ handleChange, value, label, showHex = true }) => {
   return (
     <Box>
       <Popover.Root>
         <Popover.Trigger asChild>
           <Flex css={{ alignItems: "center", gap: "1rem" }}>
-            <Box css={{ fontSize: "$lg" }}>Color</Box>
+            <Box css={{ fontSize: "$lg", mr: "auto" }}>{label || "Color"}</Box>
             <Box
               css={{
                 width: "50px",
@@ -77,9 +77,10 @@ export const ColorPicker = ({ handleChange, value }) => {
                 cursor: "pointer",
                 backgroundColor: value,
                 borderRadius: "$md",
+                ml: "auto",
               }}
             />
-            <Box>{value}</Box>
+            {showHex && <Box>{value}</Box>}
           </Flex>
         </Popover.Trigger>
         <Popover.Portal>

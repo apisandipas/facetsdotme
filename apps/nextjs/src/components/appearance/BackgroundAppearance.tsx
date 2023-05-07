@@ -3,6 +3,7 @@ import { Box, Flex, RoundedBox, styled } from "@facets/ui";
 import { useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
+import { useThemeSettings } from "~/utils/hooks/useThemeSettings";
 import { useNotification, useProfilePreview } from "~/contexts";
 import { ColorPicker } from "./ColorPicker";
 import { GradientSelector } from "./GradientSelector";
@@ -46,18 +47,12 @@ const ColorBox = styled("button", {
 export const BackgroundAppearance = () => {
   const utils = api.useContext();
   const { refreshPreview } = useProfilePreview();
-  const { data: session } = useSession();
+  const { themeSettings, profileId } = useThemeSettings();
   const { showNotification } = useNotification();
-  const profileId = session?.user?.profile.id as string;
   const updateBgStyle = api.themeSettings.updateBgStyle.useMutation();
   const updateBgColor = api.themeSettings.updateBgColor.useMutation();
   const updateBgGradientDirection =
     api.themeSettings.updateBgGradientDirection.useMutation();
-
-  const { data: themeSettings, isLoading } =
-    api.themeSettings.byProfileId.useQuery({
-      profileId,
-    });
 
   // possible refactor to formik state
   const [selectedBgStyle, selectBgStyle] = useState("SOLID");
@@ -73,7 +68,6 @@ export const BackgroundAppearance = () => {
   }, [themeSettings]);
 
   const handleStyleChange = async (newBgStyle: string) => {
-    console.log({ newBgStyle });
     if (newBgStyle !== selectedBgStyle) {
       selectBgStyle(newBgStyle);
       await updateBgStyle.mutateAsync(

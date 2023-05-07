@@ -4,12 +4,21 @@ import {
   updateBgColorSchema,
   updateBgGradientDirectionSchema,
   updateBgStyleSchema,
+  updateButtonBGColorSchema,
+  updateButtonFGColorSchema,
+  updateButtonShadowColorSchema,
+  updateButtonStyleSchema,
+  updateButtonStylesSchema,
 } from "./themeSettings.schema";
 import {
   getThemeSettingsByProfileId,
   updateBgColor,
   updateBgGradientDirection,
   updateBgStyle,
+  updateButtonBGColor,
+  updateButtonFGColor,
+  updateButtonShadowColor,
+  updateButtonStyle,
 } from "./themeSettings.service";
 
 export const themeSettingsRouter = createTRPCRouter({
@@ -31,5 +40,23 @@ export const themeSettingsRouter = createTRPCRouter({
     .input(updateBgGradientDirectionSchema)
     .mutation(async ({ ctx, input }) =>
       updateBgGradientDirection({ ctx, input }),
+    ),
+
+  updateButtonStyles: protectedProcedure
+    .input(updateButtonStyleSchema)
+    .mutation(async ({ ctx, input }) => updateButtonStyle({ ctx, input })),
+
+  updateButtonFGColor: protectedProcedure
+    .input(updateButtonFGColorSchema)
+    .mutation(async ({ ctx, input }) => updateButtonFGColor({ ctx, input })),
+
+  updateButtonBGColor: protectedProcedure
+    .input(updateButtonBGColorSchema)
+    .mutation(async ({ ctx, input }) => updateButtonBGColor({ ctx, input })),
+
+  updateButtonShadowColor: protectedProcedure
+    .input(updateButtonShadowColorSchema)
+    .mutation(async ({ ctx, input }) =>
+      updateButtonShadowColor({ ctx, input }),
     ),
 });

@@ -19,6 +19,26 @@ export const updateBgGradientDirectionSchema = z.object({
   bgGradientDirection: z.string(),
 });
 
+export const updateButtonStyleSchema = z.object({
+  profileId: z.string(),
+  buttonStyle: z.string(),
+});
+
+export const updateButtonFGColorSchema = z.object({
+  profileId: z.string(),
+  buttonFGColor: z.string(),
+});
+
+export const updateButtonBGColorSchema = z.object({
+  profileId: z.string(),
+  buttonBGColor: z.string(),
+});
+
+export const updateButtonShadowColorSchema = z.object({
+  profileId: z.string(),
+  buttonShadowColor: z.string(),
+});
+
 export type ThemeSettingByProfileIdDto = z.TypeOf<
   typeof themeSettingsByProfileIdSchema
 >;
@@ -26,4 +46,10 @@ export type UpdateBgStyleDto = z.TypeOf<typeof updateBgStyleSchema>;
 export type UpdateBgColorDto = z.TypeOf<typeof updateBgColorSchema>;
 export type UpdateBgGradientDirectionDto = z.TypeOf<
   typeof updateBgGradientDirectionSchema
+>;
+export type UpdateButtonStyleDto = z.TypeOf<typeof updateButtonStyleSchema>;
+export type UpdateButtonFGColorDto = z.TypeOf<typeof updateButtonFGColorSchema>;
+export type UpdateButtonBGColorDto = z.TypeOf<typeof updateButtonBGColorSchema>;
+export type UpdateButtonShadowColorDto = z.TypeOf<
+  typeof updateButtonShadowColorSchema
 >;

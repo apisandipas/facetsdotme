@@ -25,15 +25,10 @@ const PublicProfilePage = ({ profile, error }: any) => {
   if (error && error.type === "UNKNOWN_HANDLE") {
     return <>That handle doesn't exist. Want to claim it? Sign Up now.</>;
   }
-  /* console.log({ profile }); */
+
   const { themeSettings } = profile;
-  const {
-    buttonStyle,
-    /* buttonBGColor,
-     * buttonFGColor,
-     * bgColor,
-     * buttonShadowColor, */
-  } = themeSettings;
+  const { buttonStyle, buttonBGColor, buttonFGColor, buttonShadowColor } =
+    themeSettings;
 
   const { components, safeForegroundColor } =
     useThemedComponents(themeSettings);
@@ -64,6 +59,9 @@ const PublicProfilePage = ({ profile, error }: any) => {
                 buttonStyle={buttonStyle}
                 href={link.url}
                 key={link.url}
+                css={{
+                  color: buttonFGColor,
+                }}
               >
                 {link.text}
               </ProfileLinkButton>
