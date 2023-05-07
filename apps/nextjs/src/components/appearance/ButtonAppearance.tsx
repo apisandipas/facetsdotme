@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, RoundedBox, styled } from "@facets/ui";
+import { Box, ColorPicker, Flex, RoundedBox, styled } from "@facets/ui";
 
 import { api } from "~/utils/api";
 import { useThemeSettings } from "~/utils/hooks/useThemeSettings";
 import { useThemedComponents } from "~/utils/hooks/useThemedComponents";
-import { toTitleCase } from "~/utils/string-fns";
 import { useProfilePreview } from "~/contexts";
-import { ColorPicker } from "./ColorPicker";
 
 export const ButtonAppearance = () => {
   const utils = api.useContext();

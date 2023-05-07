@@ -1,6 +1,9 @@
-import { Box, Flex, XIcon, keyframes, styled } from "@facets/ui";
 import * as Popover from "@radix-ui/react-popover";
 import { HexColorPicker } from "react-colorful";
+
+import { Box, Flex } from "./Utils";
+import { XIcon } from "./icons";
+import { keyframes, styled } from "./theme.config";
 
 const slideUpAndFade = keyframes({
   "0%": { opacity: 0, transform: "translateY(2px)" },

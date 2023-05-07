@@ -49,6 +49,8 @@ model ThemeSettings {
   buttonBGColor       String?
   buttonFGColor       String?
   buttonShadowColor   String?
+  font                String          @default("Roboto Sans")
+  fontColor           String          @default("#000000")
   profile             Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId           String          @unique
 }

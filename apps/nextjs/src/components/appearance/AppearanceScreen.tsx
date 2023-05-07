@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { BackgroundAppearance } from "./BackgroundAppearance";
 import { ButtonAppearance } from "./ButtonAppearance";
+import { FontAppearance } from "./FontAppearance";
 import { ProfileForm } from "./ProfileForm";
 
 export const AppearanceScreen = () => {
@@ -19,6 +20,7 @@ export const AppearanceScreen = () => {
       <h2>Appearance</h2>
       <BackgroundAppearance themeSettings={themeSettings} />
       <ButtonAppearance themeSettings={themeSettings} />
+      <FontAppearance themeSettings={themeSettings} />
     </>
   );
 };

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, RoundedBox, styled } from "@facets/ui";
-import { useSession } from "next-auth/react";
+import { Box, ColorPicker, Flex, RoundedBox, styled } from "@facets/ui";
 
 import { api } from "~/utils/api";
 import { useThemeSettings } from "~/utils/hooks/useThemeSettings";
 import { useNotification, useProfilePreview } from "~/contexts";
-import { ColorPicker } from "./ColorPicker";
 import { GradientSelector } from "./GradientSelector";
 
 const backgroundVariants = {
