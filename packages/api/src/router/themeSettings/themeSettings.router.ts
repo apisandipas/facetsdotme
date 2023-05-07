@@ -9,6 +9,8 @@ import {
   updateButtonShadowColorSchema,
   updateButtonStyleSchema,
   updateButtonStylesSchema,
+  updateFontColorSchema,
+  updateFontSchema,
 } from "./themeSettings.schema";
 import {
   getThemeSettingsByProfileId,
@@ -19,6 +21,8 @@ import {
   updateButtonFGColor,
   updateButtonShadowColor,
   updateButtonStyle,
+  updateFont,
+  updateFontColor,
 } from "./themeSettings.service";
 
 export const themeSettingsRouter = createTRPCRouter({
@@ -59,4 +63,12 @@ export const themeSettingsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) =>
       updateButtonShadowColor({ ctx, input }),
     ),
+
+  updateFont: protectedProcedure
+    .input(updateFontSchema)
+    .mutation(async ({ ctx, input }) => updateFont({ ctx, input })),
+
+  updateFontColor: protectedProcedure
+    .input(updateFontColorSchema)
+    .mutation(async ({ ctx, input }) => updateFontColor({ ctx, input })),
 });

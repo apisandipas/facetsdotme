@@ -39,6 +39,16 @@ export const updateButtonShadowColorSchema = z.object({
   buttonShadowColor: z.string(),
 });
 
+export const updateFontSchema = z.object({
+  profileId: z.string(),
+  font: z.string(),
+});
+
+export const updateFontColorSchema = z.object({
+  profileId: z.string(),
+  fontColor: z.string(),
+});
+
 export type ThemeSettingByProfileIdDto = z.TypeOf<
   typeof themeSettingsByProfileIdSchema
 >;
@@ -53,3 +63,5 @@ export type UpdateButtonBGColorDto = z.TypeOf<typeof updateButtonBGColorSchema>;
 export type UpdateButtonShadowColorDto = z.TypeOf<
   typeof updateButtonShadowColorSchema
 >;
+export type UpdateFontDto = z.TypeOf<typeof updateFontSchema>;
+export type UpdateFontColorDto = z.TypeOf<typeof updateFontColorSchema>;

@@ -3,6 +3,7 @@ import { getProfileByHandle } from "@facets/api/src/router/profile/profile.servi
 import { prisma } from "@facets/db";
 import { Box, Flex, styled } from "@facets/ui";
 
+import { useGoogleFonts } from "~/utils/hooks/useGoogleFonts";
 import { useThemedComponents } from "~/utils/hooks/useThemedComponents";
 import { AvatarPlaceholder } from "~/components/AvatarPlaceholder";
 
@@ -27,11 +28,18 @@ const PublicProfilePage = ({ profile, error }: any) => {
   }
 
   const { themeSettings } = profile;
-  const { buttonStyle, buttonBGColor, buttonFGColor, buttonShadowColor } =
-    themeSettings;
+  const {
+    font,
+    fontColor,
+    buttonStyle,
+    buttonBGColor,
+    buttonFGColor,
+    buttonShadowColor,
+  } = themeSettings;
 
   const { components, safeForegroundColor } =
     useThemedComponents(themeSettings);
+  const { getFontClassName } = useGoogleFonts();
   const { ProfilePage, ProfileLinkButton } = components;
 
   return (
@@ -47,10 +55,19 @@ const PublicProfilePage = ({ profile, error }: any) => {
           <Box>
             <AvatarPlaceholder size="large" handle={profile.handle} />
           </Box>
-          <Box as="h1" css={{ fontSize: "$2xl" }}>
-            {profile.handle}
-          </Box>
-          <Box css={{ mb: "2rem" }}>{profile.bio}</Box>
+          <Flex
+            css={{
+              color: fontColor,
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+            className={getFontClassName(font)}
+          >
+            <Box as="h1" css={{ fontSize: "$2xl" }}>
+              {profile.handle}
+            </Box>
+            <Box css={{ mb: "2rem" }}>{profile.bio}</Box>
+          </Flex>
         </Flex>
         <ProfileLinksWrapper>
           {profile.links.map((link: any) => {
@@ -59,6 +76,7 @@ const PublicProfilePage = ({ profile, error }: any) => {
                 buttonStyle={buttonStyle}
                 href={link.url}
                 key={link.url}
+                className={getFontClassName(font)}
                 css={{
                   color: buttonFGColor,
                 }}

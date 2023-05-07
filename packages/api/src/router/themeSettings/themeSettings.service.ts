@@ -8,6 +8,8 @@ import {
   UpdateButtonFGColorDto,
   UpdateButtonShadowColorDto,
   UpdateButtonStyleDto,
+  UpdateFontColorDto,
+  UpdateFontDto,
 } from "./themeSettings.schema";
 
 export const getThemeSettingsByProfileId = async ({
@@ -123,6 +125,36 @@ export const updateButtonShadowColor = async ({
     where: { profileId: input.profileId },
     data: {
       buttonShadowColor: input.buttonShadowColor,
+    },
+  });
+};
+
+export const updateFontColor = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: UpdateFontColorDto;
+}) => {
+  return await ctx.prisma.themeSettings.update({
+    where: { profileId: input.profileId },
+    data: {
+      fontColor: input.fontColor,
+    },
+  });
+};
+
+export const updateFont = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: UpdateFontDto;
+}) => {
+  return await ctx.prisma.themeSettings.update({
+    where: { profileId: input.profileId },
+    data: {
+      font: input.font,
     },
   });
 };
