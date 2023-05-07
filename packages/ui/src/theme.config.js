@@ -336,7 +336,7 @@ export const {
 });
 
 const heading = {
-  fontFamily: "$heading",
+  // fontFamily: "$heading",
   fontWeight: "$bold",
   lineHeight: "$10",
   m: "0",

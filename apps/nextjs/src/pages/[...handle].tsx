@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getProfileByHandle } from "@facets/api/src/router/profile/profile.service";
 import { prisma } from "@facets/db";
-import { Box, Flex, styled } from "@facets/ui";
+import { Box, FacetsLogo, Flex, styled } from "@facets/ui";
 
 import { useGoogleFonts } from "~/utils/hooks/useGoogleFonts";
 import { useThemedComponents } from "~/utils/hooks/useThemedComponents";
@@ -91,14 +91,9 @@ const PublicProfilePage = ({ profile, error }: any) => {
             mt: "auto",
           }}
         >
-          <Box>
-            <img src="/facets-icon.svg" />
-          </Box>
-          <Flex
-            css={{ ml: "1rem", height: "32px", color: safeForegroundColor }}
-          >
-            Facets.me
-          </Flex>
+          <Link href="/">
+            <FacetsLogo strokeColor={safeForegroundColor} />
+          </Link>
         </Flex>
       </ProfileWrapper>
     </ProfilePage>
