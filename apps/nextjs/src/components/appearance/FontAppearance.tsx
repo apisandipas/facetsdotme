@@ -10,6 +10,7 @@ export const FontAppearance = () => {
   const utils = api.useContext();
   const { refreshPreview } = useProfilePreview();
   const { themeSettings, profileId } = useThemeSettings();
+
   const [selectedFontValue, selectFontValue] = useState("Roboto Sans");
   const updateFont = api.themeSettings.updateFont.useMutation();
   const [selectedFontColor, selectFontColor] = useState("#000000");

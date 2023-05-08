@@ -10,6 +10,7 @@ const AvatarPlaceholderInner = styled("div", {
   justifyContent: "center",
   fontSize: "$2xl",
   color: "$white",
+  overflow: "hidden",
   variants: {
     size: {
       large: {
@@ -25,7 +26,42 @@ const AvatarPlaceholderInner = styled("div", {
   },
 });
 
-export const AvatarPlaceholder = ({ handle, ...rest }: { handle: string }) => {
+const AvatarImage = styled("img", {
+  variants: {
+    size: {
+      large: {
+        width: "120px",
+        height: "120px",
+      },
+      small: {
+        width: "40px",
+        height: "40px",
+        fontSize: "$lg",
+      },
+    },
+  },
+  defaultVariants: {
+    size: "large",
+  },
+});
+
+export const AvatarPlaceholder = ({
+  handle,
+  image,
+  ...rest
+}: {
+  handle: string;
+}) => {
+  if (image) {
+    return (
+      <AvatarPlaceholderInner {...rest}>
+        <AvatarImage
+          src={`https://facetsdotme.s3.us-east-2.amazonaws.com/${image}`}
+          size={rest.size}
+        />
+      </AvatarPlaceholderInner>
+    );
+  }
   const avatarPlaceholder = handle ? handle[1]?.toUpperCase() : "@";
   return (
     <AvatarPlaceholderInner {...rest}>

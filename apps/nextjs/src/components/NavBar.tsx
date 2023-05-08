@@ -11,6 +11,7 @@ import {
 } from "@facets/ui";
 import { signIn, signOut, useSession } from "next-auth/react";
 
+import { api } from "~/utils/api";
 import { AvatarPlaceholder } from "./AvatarPlaceholder";
 import { UIPopover } from "./PopoverMenu";
 
@@ -149,6 +150,10 @@ const NavLinks = () => {
 
 export const NavBar = () => {
   const { status, data } = useSession();
+  const { data: profile } = api.profile.byUserId.useQuery({
+    userId: data?.user?.id,
+  });
+  console.log({ session: data });
   const signMeOut = () => {
     signOut({ callbackUrl: "/login" });
   };
@@ -183,7 +188,11 @@ export const NavBar = () => {
       {status === "authenticated" ? (
         <RightSection>
           {/* <WelcomeMsg>Welcome, {data.user?.profile?.handle}</WelcomeMsg> */}
-          <AvatarPlaceholder size="small" handle={data.user?.profile?.handle} />
+          <AvatarPlaceholder
+            size="small"
+            image={profile?.image}
+            handle={data.user?.profile?.handle}
+          />
           <Button onClick={signMeOut}>Sign Out</Button>
         </RightSection>
       ) : (

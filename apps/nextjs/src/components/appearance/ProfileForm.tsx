@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Label,
+  ModalDialog,
   RoundedBox,
   TextArea,
   styled,
@@ -18,6 +19,7 @@ import { api } from "~/utils/api";
 import { useNotification } from "~/contexts";
 import { AvatarPlaceholder } from "../AvatarPlaceholder";
 import { Loading } from "../Loading";
+import { AvatarSelection } from "./AvatarSelection";
 
 interface IProfileFields {
   handle: string;
@@ -93,6 +95,7 @@ export const ProfileForm = ({}) => {
   const updateProfile = api.profile.update.useMutation();
 
   const handle = profileData?.handle;
+  const image = profileData?.image;
   const { values, errors, touched, handleChange, handleSubmit, setFieldValue } =
     useFormik({
       initialValues: {
@@ -141,41 +144,7 @@ export const ProfileForm = ({}) => {
               width: "$full",
             }}
           >
-            <Flex
-              css={{
-                gap: "1.5rem",
-
-                mb: "1rem",
-              }}
-            >
-              <Box>
-                <AvatarPlaceholder handle={handle} />
-              </Box>
-              <Flex
-                css={{
-                  flexDirection: "column",
-                  width: "$full",
-                }}
-              >
-                <Box>
-                  <Button
-                    type="button"
-                    css={{ width: "$full", mb: "1rem", fontSize: "$lg" }}
-                  >
-                    Pick an image
-                  </Button>
-                </Box>
-                <Box>
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    css={{ width: "$full", fontSize: "$lg" }}
-                  >
-                    Remove
-                  </Button>
-                </Box>
-              </Flex>
-            </Flex>
+            <AvatarSelection handle={handle} image={image} />
             <Label htmlFor="handle-input">Handle</Label>
             <Input
               name="handle"

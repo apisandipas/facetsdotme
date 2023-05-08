@@ -22,6 +22,11 @@ export const createProfileSchema = z.object({
   bio: z.string().optional(),
 });
 
+export const updateProfileImageSchema = z.object({
+  userId: z.string(),
+  image: z.string(),
+});
+
 export const deleteProfileSchema = z.string();
 
 export type ProfileByHandleDto = z.TypeOf<typeof profileByHandleSchema>;
@@ -29,3 +34,4 @@ export type ProfileByIdDto = z.TypeOf<typeof profileByIdSchema>;
 export type ProfileByUserIdDto = z.TypeOf<typeof profileByUserIdSchema>;
 export type CreateProfileDto = z.TypeOf<typeof createProfileSchema>;
 export type DeleteProfileDto = z.TypeOf<typeof deleteProfileSchema>;
+export type UpdateProfileImageDto = z.TypeOf<typeof updateProfileImageSchema>;

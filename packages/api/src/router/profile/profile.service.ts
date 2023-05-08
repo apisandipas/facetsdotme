@@ -99,6 +99,21 @@ export const updateProfile = async ({
   });
 };
 
+export const updateProfileImage = async ({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: UpdateProfileImageDto;
+}) => {
+  return await ctx.prisma.profile.update({
+    where: { userId: input.userId },
+    data: {
+      image: input.image,
+    },
+  });
+};
+
 export const deleteProfile = async ({
   ctx,
   input,

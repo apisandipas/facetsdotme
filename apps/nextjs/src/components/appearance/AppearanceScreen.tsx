@@ -1,6 +1,3 @@
-import { useSession } from "next-auth/react";
-
-import { api } from "~/utils/api";
 import { BackgroundAppearance } from "./BackgroundAppearance";
 import { ButtonAppearance } from "./ButtonAppearance";
 import { FontAppearance } from "./FontAppearance";

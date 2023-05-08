@@ -9,6 +9,7 @@ import {
   profileByHandleSchema,
   profileByIdSchema,
   profileByUserIdSchema,
+  updateProfileImageSchema,
 } from "./profile.schema";
 import {
   createProfile,
@@ -18,6 +19,7 @@ import {
   getProfileById,
   getProfileByUserId,
   updateProfile,
+  updateProfileImage,
 } from "./profile.service";
 
 export const profileRouter = createTRPCRouter({
@@ -37,6 +39,9 @@ export const profileRouter = createTRPCRouter({
   update: protectedProcedure
     .input(createProfileSchema)
     .mutation(async ({ ctx, input }) => updateProfile({ ctx, input })),
+  updateImage: protectedProcedure
+    .input(updateProfileImageSchema)
+    .mutation(async ({ ctx, input }) => updateProfileImage({ ctx, input })),
   delete: protectedProcedure
     .input(deleteProfileSchema)
     .mutation(async ({ ctx, input }) => deleteProfile({ ctx, input })),

@@ -11,10 +11,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.328.0",
+    "@aws-sdk/s3-request-presigner": "^3.328.0",
     "@facets/auth": "*",
     "@facets/db": "*",
     "@trpc/client": "^10.20.0",
     "@trpc/server": "^10.20.0",
+    "dotenv": "^16.0.3",
     "superjson": "1.9.1",
     "zod": "^3.21.4"
   },

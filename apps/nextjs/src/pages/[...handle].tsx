@@ -42,6 +42,7 @@ const PublicProfilePage = ({ profile, error }: any) => {
   const { getFontClassName } = useGoogleFonts();
   const { ProfilePage, ProfileLinkButton } = components;
 
+  console.log({ profile });
   return (
     <ProfilePage>
       <ProfileWrapper>
@@ -53,7 +54,11 @@ const PublicProfilePage = ({ profile, error }: any) => {
           }}
         >
           <Box>
-            <AvatarPlaceholder size="large" handle={profile.handle} />
+            <AvatarPlaceholder
+              size="large"
+              handle={profile.handle}
+              image={profile.image}
+            />
           </Box>
           <Flex
             css={{
@@ -129,11 +134,12 @@ export const getServerSideProps = async ({ params }) => {
     };
   }
 
-  const { bio, links, themeSettings } = profile;
+  const { bio, links, image, themeSettings } = profile;
   return {
     props: {
       profile: {
         handle,
+        image,
         bio,
         links,
         themeSettings,
