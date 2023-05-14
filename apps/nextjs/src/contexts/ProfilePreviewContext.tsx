@@ -1,11 +1,4 @@
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactNode, createContext, useContext, useState } from "react";
 import { Container, styled } from "@facets/ui";
 
 interface ProfilePreviewContextType {
@@ -26,8 +19,6 @@ const PreviewFrame = styled("iframe", {
   borderRadius: "35px",
   width: "352px",
   height: "724px",
-  /* transform: "translateY(-20%)", */
-  /* height: "480px", */
 });
 
 const ProfilePreviewContext = createContext<ProfilePreviewContextType | null>(
